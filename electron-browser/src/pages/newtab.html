@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Tab</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #E30A17 0%, #B50812 100%);
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    .logo-section {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .subtitle {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    .search-section {
+      max-width: 600px;
+      margin: 0 auto 80px;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 18px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 30px;
+      outline: none;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .shortcuts-section {
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      margin-bottom: 24px;
+      font-weight: 600;
+      opacity: 0.95;
+    }
+
+    .shortcuts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 20px;
+    }
+
+    .shortcut {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .shortcut:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-4px);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .shortcut-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .shortcut-title {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .bookmarks-section {
+      margin-bottom: 60px;
+    }
+
+    .bookmarks-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .bookmark-item {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 8px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
+
+    .bookmark-item:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .bookmark-favicon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .bookmark-title {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .empty-message {
+      text-align: center;
+      opacity: 0.7;
+      font-size: 14px;
+      padding: 40px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-section">
+      <img src="../../public/assets/logo.png" alt="Turkish Chromium" class="logo">
+      <h1>The Turkish Chromium</h1>
+      <p class="subtitle">Browse the web with Turkish pride</p>
+    </div>
+
+    <div class="search-section">
+      <input
+        type="text"
+        class="search-box"
+        id="searchBox"
+        placeholder="Search the web or enter URL"
+      />
+    </div>
+
+    <div class="shortcuts-section">
+      <h2 class="section-title">Quick Access</h2>
+      <div class="shortcuts-grid">
+        <div class="shortcut" onclick="navigate('https://www.google.com')">
+          <div class="shortcut-icon">🔍</div>
+          <div class="shortcut-title">Google</div>
+        </div>
+        <div class="shortcut" onclick="navigate('https://www.youtube.com')">
+          <div class="shortcut-icon">🎥</div>
+          <div class="shortcut-title">YouTube</div>
+        </div>
+        <div class="shortcut" onclick="navigate('https://www.github.com')">
+          <div class="shortcut-icon">🐙</div>
+          <div class="shortcut-title">GitHub</div>
+        </div>
+        <div class="shortcut" onclick="navigate('https://www.twitter.com')">
+          <div class="shortcut-icon">🐦</div>
+          <div class="shortcut-title">Twitter</div>
+        </div>
+        <div class="shortcut" onclick="navigate('https://www.wikipedia.org')">
+          <div class="shortcut-icon">📖</div>
+          <div class="shortcut-title">Wikipedia</div>
+        </div>
+        <div class="shortcut" onclick="navigate('https://www.reddit.com')">
+          <div class="shortcut-icon">🗨️</div>
+          <div class="shortcut-title">Reddit</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bookmarks-section">
+      <h2 class="section-title">Bookmarks</h2>
+      <div class="bookmarks-list" id="bookmarksList">
+        <div class="empty-message">No bookmarks yet. Start bookmarking your favorite sites!</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadBookmarks() {
+      try {
+        const bookmarks = await window.electronAPI.getBookmarks();
+        const container = document.getElementById('bookmarksList');
+        
+        if (bookmarks.length === 0) {
+          container.innerHTML = '<div class="empty-message">No bookmarks yet. Start bookmarking your favorite sites!</div>';
+          return;
+        }
+        
+        container.innerHTML = '';
+        bookmarks.slice(0, 10).forEach(bookmark => {
+          const item = document.createElement('div');
+          item.className = 'bookmark-item';
+          item.onclick = () => navigate(bookmark.url);
+          
+          const favicon = document.createElement('img');
+          favicon.className = 'bookmark-favicon';
+          favicon.src = bookmark.favicon || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fff"><circle cx="12" cy="12" r="10"/></svg>';
+          
+          const title = document.createElement('div');
+          title.className = 'bookmark-title';
+          title.textContent = bookmark.title || bookmark.url;
+          
+          item.appendChild(favicon);
+          item.appendChild(title);
+          container.appendChild(item);
+        });
+      } catch (error) {
+        console.error('Failed to load bookmarks:', error);
+      }
+    }
+
+    function navigate(url) {
+      window.electronAPI.navigate(url);
+    }
+
+    const searchBox = document.getElementById('searchBox');
+    searchBox.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const query = searchBox.value.trim();
+        if (query) {
+          if (query.includes('.') || query.startsWith('http')) {
+            navigate(query);
+          } else {
+            navigate('https://www.google.com/search?q=' + encodeURIComponent(query));
+          }
+        }
+      }
+    });
+
+    // Load bookmarks on page load
+    loadBookmarks();
+  </script>
+</body>
+</html>

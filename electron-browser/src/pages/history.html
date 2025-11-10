@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>History - Turkish Chromium</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8f9fa;
+      color: #212529;
+    }
+
+    .header {
+      background: #E30A17;
+      color: white;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .search-box {
+      flex: 1;
+      padding: 12px 20px;
+      font-size: 15px;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .search-box:focus {
+      border-color: #E30A17;
+    }
+
+    .clear-btn {
+      padding: 12px 24px;
+      background: #E30A17;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .clear-btn:hover {
+      background: #B50812;
+    }
+
+    .history-list {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+    }
+
+    .history-item {
+      padding: 16px 24px;
+      border-bottom: 1px solid #e9ecef;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .history-item:hover {
+      background: #f8f9fa;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-favicon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .history-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .history-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: #212529;
+      margin-bottom: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .history-url {
+      font-size: 13px;
+      color: #6c757d;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .history-time {
+      font-size: 13px;
+      color: #6c757d;
+      flex-shrink: 0;
+    }
+
+    .empty-message {
+      text-align: center;
+      padding: 60px 24px;
+      color: #6c757d;
+      font-size: 16px;
+    }
+
+    .group-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #495057;
+      margin: 32px 0 16px;
+      padding-left: 8px;
+    }
+
+    .group-title:first-child {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-content">
+      <img src="../../public/assets/logo.png" alt="Logo" class="logo">
+      <h1>Browsing History</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="controls">
+      <input
+        type="text"
+        class="search-box"
+        id="searchBox"
+        placeholder="Search history..."
+      />
+      <button class="clear-btn" id="clearBtn">Clear All History</button>
+    </div>
+
+    <div id="historyContainer"></div>
+  </div>
+
+  <script>
+    let allHistory = [];
+
+    async function loadHistory() {
+      try {
+        allHistory = await window.electronAPI.getHistory();
+        renderHistory(allHistory);
+      } catch (error) {
+        console.error('Failed to load history:', error);
+      }
+    }
+
+    function renderHistory(historyItems) {
+      const container = document.getElementById('historyContainer');
+      
+      if (historyItems.length === 0) {
+        container.innerHTML = '<div class="empty-message">No browsing history</div>';
+        return;
+      }
+
+      // Group by date
+      const groups = {};
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      historyItems.forEach(item => {
+        const date = new Date(item.visit_time);
+        date.setHours(0, 0, 0, 0);
+        
+        let groupKey;
+        if (date.getTime() === today.getTime()) {
+          groupKey = 'Today';
+        } else if (date.getTime() === yesterday.getTime()) {
+          groupKey = 'Yesterday';
+        } else {
+          groupKey = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        }
+
+        if (!groups[groupKey]) {
+          groups[groupKey] = [];
+        }
+        groups[groupKey].push(item);
+      });
+
+      // Render groups
+      container.innerHTML = '';
+      Object.entries(groups).forEach(([groupName, items]) => {
+        const groupTitle = document.createElement('div');
+        groupTitle.className = 'group-title';
+        groupTitle.textContent = groupName;
+        container.appendChild(groupTitle);
+
+        const list = document.createElement('div');
+        list.className = 'history-list';
+
+        items.forEach(item => {
+          const historyItem = document.createElement('div');
+          historyItem.className = 'history-item';
+          historyItem.onclick = () => navigate(item.url);
+
+          const favicon = document.createElement('img');
+          favicon.className = 'history-favicon';
+          favicon.src = item.favicon || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><circle cx="12" cy="12" r="10"/></svg>';
+          favicon.onerror = () => {
+            favicon.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><circle cx="12" cy="12" r="10"/></svg>';
+          };
+
+          const info = document.createElement('div');
+          info.className = 'history-info';
+
+          const title = document.createElement('div');
+          title.className = 'history-title';
+          title.textContent = item.title || item.url;
+
+          const url = document.createElement('div');
+          url.className = 'history-url';
+          url.textContent = item.url;
+
+          info.appendChild(title);
+          info.appendChild(url);
+
+          const time = document.createElement('div');
+          time.className = 'history-time';
+          const visitDate = new Date(item.visit_time);
+          time.textContent = visitDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+          historyItem.appendChild(favicon);
+          historyItem.appendChild(info);
+          historyItem.appendChild(time);
+          list.appendChild(historyItem);
+        });
+
+        container.appendChild(list);
+      });
+    }
+
+    function navigate(url) {
+      window.electronAPI.navigate(url);
+    }
+
+    async function clearHistory() {
+      if (confirm('Are you sure you want to clear all browsing history?')) {
+        try {
+          await window.electronAPI.clearHistory();
+          allHistory = [];
+          renderHistory([]);
+        } catch (error) {
+          console.error('Failed to clear history:', error);
+        }
+      }
+    }
+
+    async function searchHistory(query) {
+      if (!query.trim()) {
+        renderHistory(allHistory);
+        return;
+      }
+
+      try {
+        const results = await window.electronAPI.searchHistory(query);
+        renderHistory(results);
+      } catch (error) {
+        console.error('Failed to search history:', error);
+      }
+    }
+
+    const searchBox = document.getElementById('searchBox');
+    const clearBtn = document.getElementById('clearBtn');
+
+    searchBox.addEventListener('input', (e) => {
+      searchHistory(e.target.value);
+    });
+
+    clearBtn.addEventListener('click', clearHistory);
+
+    // Load history on page load
+    loadHistory();
+  </script>
+</body>
+</html>
