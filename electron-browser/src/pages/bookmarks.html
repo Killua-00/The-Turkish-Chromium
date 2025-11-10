@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookmarks - Turkish Chromium</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8f9fa;
+      color: #212529;
+    }
+
+    .header {
+      background: #E30A17;
+      color: white;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .bookmarks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .bookmark-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .bookmark-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
+    .bookmark-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .bookmark-favicon {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+    }
+
+    .bookmark-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #212529;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .bookmark-url {
+      font-size: 13px;
+      color: #6c757d;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-bottom: 12px;
+    }
+
+    .bookmark-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #6c757d;
+    }
+
+    .bookmark-folder {
+      background: #e9ecef;
+      padding: 4px 12px;
+      border-radius: 12px;
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 28px;
+      height: 28px;
+      background: rgba(227, 10, 23, 0.1);
+      color: #E30A17;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: all 0.15s;
+      font-size: 16px;
+    }
+
+    .bookmark-card:hover .delete-btn {
+      opacity: 1;
+    }
+
+    .delete-btn:hover {
+      background: #E30A17;
+      color: white;
+    }
+
+    .empty-message {
+      text-align: center;
+      padding: 80px 24px;
+      color: #6c757d;
+    }
+
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+    }
+
+    .empty-text {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .empty-subtext {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-content">
+      <img src="../../public/assets/logo.png" alt="Logo" class="logo">
+      <h1>Bookmarks</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div id="bookmarksContainer"></div>
+  </div>
+
+  <script>
+    async function loadBookmarks() {
+      try {
+        const bookmarks = await window.electronAPI.getBookmarks();
+        renderBookmarks(bookmarks);
+      } catch (error) {
+        console.error('Failed to load bookmarks:', error);
+      }
+    }
+
+    function renderBookmarks(bookmarks) {
+      const container = document.getElementById('bookmarksContainer');
+      
+      if (bookmarks.length === 0) {
+        container.innerHTML = `
+          <div class="empty-message">
+            <div class="empty-icon">⭐</div>
+            <div class="empty-text">No bookmarks yet</div>
+            <div class="empty-subtext">Start bookmarking your favorite websites by clicking the star icon in the address bar</div>
+          </div>
+        `;
+        return;
+      }
+
+      const grid = document.createElement('div');
+      grid.className = 'bookmarks-grid';
+
+      bookmarks.forEach(bookmark => {
+        const card = document.createElement('div');
+        card.className = 'bookmark-card';
+        card.onclick = (e) => {
+          if (!e.target.closest('.delete-btn')) {
+            navigate(bookmark.url);
+          }
+        };
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.textContent = '×';
+        deleteBtn.onclick = (e) => {
+          e.stopPropagation();
+          deleteBookmark(bookmark.url);
+        };
+
+        const header = document.createElement('div');
+        header.className = 'bookmark-header';
+
+        const favicon = document.createElement('img');
+        favicon.className = 'bookmark-favicon';
+        favicon.src = bookmark.favicon || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><circle cx="12" cy="12" r="10"/></svg>';
+        favicon.onerror = () => {
+          favicon.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><circle cx="12" cy="12" r="10"/></svg>';
+        };
+
+        const title = document.createElement('div');
+        title.className = 'bookmark-title';
+        title.textContent = bookmark.title || bookmark.url;
+
+        header.appendChild(favicon);
+        header.appendChild(title);
+
+        const url = document.createElement('div');
+        url.className = 'bookmark-url';
+        url.textContent = bookmark.url;
+
+        const meta = document.createElement('div');
+        meta.className = 'bookmark-meta';
+
+        const folder = document.createElement('div');
+        folder.className = 'bookmark-folder';
+        folder.textContent = bookmark.folder || 'Bookmarks Bar';
+
+        const date = document.createElement('div');
+        const bookmarkDate = new Date(bookmark.created_time);
+        date.textContent = bookmarkDate.toLocaleDateString();
+
+        meta.appendChild(folder);
+        meta.appendChild(date);
+
+        card.appendChild(deleteBtn);
+        card.appendChild(header);
+        card.appendChild(url);
+        card.appendChild(meta);
+        grid.appendChild(card);
+      });
+
+      container.innerHTML = '';
+      container.appendChild(grid);
+    }
+
+    function navigate(url) {
+      window.electronAPI.navigate(url);
+    }
+
+    async function deleteBookmark(url) {
+      if (confirm('Remove this bookmark?')) {
+        try {
+          await window.electronAPI.removeBookmark(url);
+          loadBookmarks();
+        } catch (error) {
+          console.error('Failed to delete bookmark:', error);
+        }
+      }
+    }
+
+    // Load bookmarks on page load
+    loadBookmarks();
+  </script>
+</body>
+</html>

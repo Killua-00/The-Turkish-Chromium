@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - Turkish Chromium</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f8f9fa;
+      color: #212529;
+    }
+
+    .header {
+      background: #E30A17;
+      color: white;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 32px 24px;
+    }
+
+    .settings-section {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #212529;
+    }
+
+    .setting-item {
+      padding: 16px 0;
+      border-bottom: 1px solid #e9ecef;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+
+    .setting-info {
+      flex: 1;
+    }
+
+    .setting-label {
+      font-size: 15px;
+      font-weight: 500;
+      color: #212529;
+      margin-bottom: 4px;
+    }
+
+    .setting-description {
+      font-size: 13px;
+      color: #6c757d;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 28px;
+      background: #dee2e6;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .toggle-switch.active {
+      background: #E30A17;
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.15s;
+    }
+
+    .toggle-switch.active::after {
+      transform: translateX(20px);
+    }
+
+    .input-field {
+      padding: 8px 12px;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+      width: 200px;
+    }
+
+    .input-field:focus {
+      border-color: #E30A17;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background: #E30A17;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn:hover {
+      background: #B50812;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-content">
+      <img src="../../public/assets/logo.png" alt="Logo" class="logo">
+      <h1>Settings</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="settings-section">
+      <div class="section-title">Appearance</div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Dark Mode</div>
+          <div class="setting-description">Use dark theme for the browser interface</div>
+        </div>
+        <div class="toggle-switch" id="darkModeToggle"></div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Show Bookmarks Bar</div>
+          <div class="setting-description">Display bookmarks bar below the address bar</div>
+        </div>
+        <div class="toggle-switch active" id="bookmarksBarToggle"></div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="section-title">Privacy & Security</div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Block Third-Party Cookies</div>
+          <div class="setting-description">Prevent sites from tracking you with cookies</div>
+        </div>
+        <div class="toggle-switch" id="blockCookiesToggle"></div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Clear Browsing Data</div>
+          <div class="setting-description">Remove history, cookies, and cached files</div>
+        </div>
+        <button class="btn btn-secondary" id="clearDataBtn">Clear Data</button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="section-title">Search Engine</div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Default Search Engine</div>
+          <div class="setting-description">Choose your preferred search engine</div>
+        </div>
+        <select class="input-field" id="searchEngineSelect">
+          <option value="google">Google</option>
+          <option value="bing">Bing</option>
+          <option value="duckduckgo">DuckDuckGo</option>
+          <option value="yahoo">Yahoo</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="section-title">Startup</div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Homepage</div>
+          <div class="setting-description">Set your homepage URL</div>
+        </div>
+        <input type="text" class="input-field" id="homepageInput" placeholder="https://example.com" />
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">On Startup</div>
+          <div class="setting-description">Choose what to show when browser starts</div>
+        </div>
+        <select class="input-field" id="startupSelect">
+          <option value="newtab">New Tab Page</option>
+          <option value="homepage">Homepage</option>
+          <option value="continue">Continue Where I Left Off</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="section-title">About</div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Version Information</div>
+          <div class="setting-description">View detailed version information</div>
+        </div>
+        <button class="btn" onclick="navigate('chrome://version')">View Details</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function navigate(url) {
+      window.electronAPI.navigate(url);
+    }
+
+    // Toggle switches
+    const toggles = document.querySelectorAll('.toggle-switch');
+    toggles.forEach(toggle => {
+      toggle.addEventListener('click', function() {
+        this.classList.toggle('active');
+      });
+    });
+
+    // Clear data button
+    document.getElementById('clearDataBtn').addEventListener('click', async () => {
+      if (confirm('This will clear all browsing history, cookies, and cached data. Continue?')) {
+        try {
+          await window.electronAPI.clearHistory();
+          alert('Browsing data cleared successfully!');
+        } catch (error) {
+          console.error('Failed to clear data:', error);
+          alert('Failed to clear browsing data');
+        }
+      }
+    });
+
+    // Load saved settings
+    async function loadSettings() {
+      try {
+        const homepage = await window.electronAPI.getSettings('homepage');
+        if (homepage) {
+          document.getElementById('homepageInput').value = homepage;
+        }
+
+        const searchEngine = await window.electronAPI.getSettings('searchEngine');
+        if (searchEngine) {
+          document.getElementById('searchEngineSelect').value = searchEngine;
+        }
+
+        const startupPage = await window.electronAPI.getSettings('startupPage');
+        if (startupPage) {
+          document.getElementById('startupSelect').value = startupPage;
+        }
+      } catch (error) {
+        console.error('Failed to load settings:', error);
+      }
+    }
+
+    // Save settings on change
+    document.getElementById('homepageInput').addEventListener('change', async (e) => {
+      await window.electronAPI.setSettings({ key: 'homepage', value: e.target.value });
+    });
+
+    document.getElementById('searchEngineSelect').addEventListener('change', async (e) => {
+      await window.electronAPI.setSettings({ key: 'searchEngine', value: e.target.value });
+    });
+
+    document.getElementById('startupSelect').addEventListener('change', async (e) => {
+      await window.electronAPI.setSettings({ key: 'startupPage', value: e.target.value });
+    });
+
+    // Load settings on page load
+    loadSettings();
+  </script>
+</body>
+</html>
