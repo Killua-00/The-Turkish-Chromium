@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Turkish Chromium</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #E30A17 0%, #B50812 100%);
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 800px;
+      padding: 60px 40px;
+      text-align: center;
+    }
+
+    .logo {
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 32px;
+      filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    h1 {
+      font-size: 56px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .subtitle {
+      font-size: 24px;
+      margin-bottom: 48px;
+      opacity: 0.95;
+      font-weight: 300;
+    }
+
+    .version-info {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      margin-bottom: 32px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 16px;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    .info-value {
+      font-family: 'Courier New', monospace;
+      opacity: 0.95;
+    }
+
+    .features {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      margin-bottom: 32px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .features-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      text-align: left;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 15px;
+    }
+
+    .feature-icon {
+      font-size: 24px;
+    }
+
+    .credits {
+      font-size: 14px;
+      opacity: 0.8;
+      line-height: 1.8;
+    }
+
+    .credits p {
+      margin-bottom: 8px;
+    }
+
+    .flag {
+      font-size: 32px;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="../../public/assets/logo.png" alt="Turkish Chromium Logo" class="logo">
+    
+    <h1>The Turkish Chromium</h1>
+    <p class="subtitle">A Chromium-based web browser built with pride</p>
+
+    <div class="version-info">
+      <div class="info-row">
+        <span class="info-label">Browser Version</span>
+        <span class="info-value">1.0.0</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Chromium Version</span>
+        <span class="info-value" id="chromiumVersion">Loading...</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Electron Version</span>
+        <span class="info-value" id="electronVersion">Loading...</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Node.js Version</span>
+        <span class="info-value" id="nodeVersion">Loading...</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">V8 Engine Version</span>
+        <span class="info-value" id="v8Version">Loading...</span>
+      </div>
+    </div>
+
+    <div class="features">
+      <div class="features-title">✨ Features</div>
+      <div class="features-grid">
+        <div class="feature-item">
+          <span class="feature-icon">🚀</span>
+          <span>Fast & Lightweight</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🔒</span>
+          <span>Private & Secure</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">📑</span>
+          <span>Tab Management</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">⭐</span>
+          <span>Bookmarks System</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">📚</span>
+          <span>History Tracking</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">⚙️</span>
+          <span>Customizable Settings</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🎨</span>
+          <span>Turkish-Themed Design</span>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🌐</span>
+          <span>Modern Web Standards</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="credits">
+      <p><strong>The Turkish Chromium</strong></p>
+      <p>Built on the Chromium open-source project</p>
+      <p>Powered by Electron framework</p>
+      <p class="flag">🇹🇷</p>
+    </div>
+  </div>
+
+  <script>
+    // Display version information
+    document.getElementById('chromiumVersion').textContent = process.versions.chrome || 'N/A';
+    document.getElementById('electronVersion').textContent = process.versions.electron || 'N/A';
+    document.getElementById('nodeVersion').textContent = process.versions.node || 'N/A';
+    document.getElementById('v8Version').textContent = process.versions.v8 || 'N/A';
+  </script>
+</body>
+</html>
