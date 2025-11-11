@@ -1,1 +1,5 @@
-# Here are your Instructions
+W E L C O M E   T O   THE   T U R K I S H   C H R O M I UM
+⚠️⚠️⚠️  THIS VERSION HAVE FILE SYSTEM PROBLEM. WE MAYBE SOLVE PROBLEM IN NEXT VERSION.
+⚠️⚠️⚠️ THIS VERSION IS CREATED BY ME AND EMERGENT AI©
+v0.01 alpha build
+
