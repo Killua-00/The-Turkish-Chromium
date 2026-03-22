@@ -69,6 +69,6 @@ Create a feature branch.
 Submit a Pull Request.
 
 📄 License
-This project is currently under the MIT License.
+This project is currently under the GNU General Public License 3.0 .
 
 Developed by Killua-00 & Emergent AI© Version: 0.01 Alpha Build
